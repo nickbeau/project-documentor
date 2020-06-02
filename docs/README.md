@@ -27,3 +27,6 @@ Options:
   --version                    Show version information
   -?, -h, --help               Show help and usage information
 ```
+
+This version written in dotnet core, and portable to Linux, Mac and PC
+
