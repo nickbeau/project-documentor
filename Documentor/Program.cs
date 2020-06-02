@@ -125,8 +125,7 @@ namespace Documentor
                 var columns = await client.Repository.Project.Column.GetAll(project.Id);
                
                 List<string> lines = new List<string>();
-                int lcount = 0;
-                int ccount = 0;
+               
                 int colcount = 0;
                 foreach(var column in columns)
                 {
@@ -135,7 +134,6 @@ namespace Documentor
                     sb.AppendLine("");
                     Console.WriteLine($"  Column {colcount} of {columns.Count} - {column.Name}");
                     var cards = await client.Repository.Project.Card.GetAll(column.Id);
-                    lcount = 0;
                     int cardcount = 0;
 
                     //Handle no cards, produce nice message
