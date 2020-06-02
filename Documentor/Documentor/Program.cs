@@ -12,11 +12,13 @@ namespace Documentor
     class Program
     {
         /// <summary>
-        /// Produces a markdown status report of a github repo
+        /// Produces a markdown status report of a github repo. The report is delivered into this directory with the 
+        /// same filename as the repository chosen below. This markdown file can be printed to pdf or edited in a markdown
+        /// editor.
         /// </summary>
-        /// <param name="repository">The Repository</param>
-        /// <param name="owner">The Owner's Github Alias</param>
-        /// <param name="token">The GitHub Token</param>
+        /// <param name="repository">The GitHub Repository.</param>
+        /// <param name="owner">The Owner's Github Alias.</param>
+        /// <param name="token">The GitHub Token.</param>
         /// <returns></returns>
         public static async Task Main(string repository, string owner, string token)
         {
@@ -25,13 +27,13 @@ namespace Documentor
             Console.WriteLine($"{Resources.AppTitle}");
             Console.WriteLine($"{Resources.Copyright}");
             Console.WriteLine($"{Resources.PlsWait}");
-            Console.WriteLine("Step 1 of # - Headers");
+            Console.WriteLine($"{Resources.Step} 1 {Resources.of} 3 - {Resources.Headers}");
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("# Released Group Project Status Report");
+            sb.AppendLine($"# {Resources.ReportTitle}");
             sb.AppendLine("");
-            sb.AppendLine($"## Status Report for {repository} created on {DateTime.Now}");
+            sb.AppendLine($"## {Resources.StatusReportFor} {repository} {Resources.CreatedOn} {DateTime.Now}");
             sb.AppendLine("");
-            sb.AppendLine("## Overall Information");
+            sb.AppendLine($"## {Resources.OverallInfo}");
             sb.AppendLine("");
             
             var client = new GitHubClient(new ProductHeaderValue("project-documentor"));
@@ -41,24 +43,24 @@ namespace Documentor
 
             var repo = await client.Repository.Get(owner, repository);
 
-            sb.AppendLine("| Item | Value |");
-            sb.AppendLine("| -- | -- |");
-            sb.AppendLine($"| Date Created | {repo.CreatedAt} |");
-            sb.AppendLine($"| Default Branch | {repo.DefaultBranch} |");
-            sb.AppendLine($"| Description | {repo.Description} |");
-            sb.AppendLine($"| Full Name | {repo.FullName} |");
-            sb.AppendLine($"| URL | {repo.GitUrl} |");
-            sb.AppendLine($"| Name | {repo.Name} |");
-            sb.AppendLine($"| Current Open Issues | {repo.OpenIssuesCount} |");
-            sb.AppendLine($"| Last Code Update | {repo.PushedAt} |");
-            sb.AppendLine($"| Subscribers | {repo.SubscribersCount} |");
-            sb.AppendLine($"| Last Update | {repo.UpdatedAt} |");
+            sb.AppendLine($"| {Resources.Item} | {Resources.Value} |");
+            sb.AppendLine($"| -- | -- |");
+            sb.AppendLine($"| {Resources.DateCreated} | {repo.CreatedAt} |");
+            sb.AppendLine($"| {Resources.DefaultBranch} | {repo.DefaultBranch} |");
+            sb.AppendLine($"| {Resources.Description} | {repo.Description} |");
+            sb.AppendLine($"| {Resources.FullName} | {repo.FullName} |");
+            sb.AppendLine($"| {Resources.URL} | {repo.GitUrl} |");
+            sb.AppendLine($"| {Resources.Name} | {repo.Name} |");
+            sb.AppendLine($"| {Resources.CurrentOpenIssues} | {repo.OpenIssuesCount} |");
+            sb.AppendLine($"| {Resources.LastCodeUpdate} | {repo.PushedAt} |");
+            sb.AppendLine($"| {Resources.Subscribers} | {repo.SubscribersCount} |");
+            sb.AppendLine($"| {Resources.Last_Update} | {repo.UpdatedAt} |");
 
             sb.AppendLine("");
-            sb.AppendLine("## Issues");
-            Console.WriteLine("Step 2 of # - Issues modified in last 30 days");
+            sb.AppendLine($"## {Resources.Issues}");
+            Console.WriteLine($"{Resources.Step} 2 {Resources.of} 3 - {Resources.IssuesModified30}");
             sb.AppendLine("");
-            sb.AppendLine("### Issues modified in the last 30 days");
+            sb.AppendLine($"### {Resources.IssuesModified30}");
             var issuefilter = new RepositoryIssueRequest
             {
                 Filter = IssueFilter.All,
@@ -69,7 +71,7 @@ namespace Documentor
             };
             var issues = await client.Issue.GetAllForRepository(owner, repository, issuefilter);
             sb.AppendLine("");
-            sb.AppendLine("| Issue ID | Modified | Status | Title |");
+            sb.AppendLine($"| {Resources.IssueId} | {Resources.Modified} | {Resources.Status} | {Resources.Title} |");
             sb.AppendLine("| -------- | -------- | ------ | ----- |");
             foreach (var issue in issues)
             {
@@ -77,9 +79,9 @@ namespace Documentor
             }
 
             sb.AppendLine("");
-            sb.AppendLine("### Open Issues");
+            sb.AppendLine($"### {Resources.Open_Issues}");
             sb.AppendLine("");
-            sb.AppendLine("| Issue ID | Modified | Status | Title |");
+            sb.AppendLine($"| {Resources.IssueId} | {Resources.Modified} | {Resources.Status} | {Resources.Title} |");
             sb.AppendLine("| -------- | -------- | ------ | ----- |");
             issuefilter = new RepositoryIssueRequest
             {
@@ -96,9 +98,9 @@ namespace Documentor
                 sb.AppendLine($"| [{issue.Number}]({issue.Url}) | {issue.UpdatedAt.Value.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} | {issue.State} | {issue.Title} |");
             }
 
-            Console.WriteLine("Step 3 of #, Projects");
+            Console.WriteLine($"{Resources.Step} 3 {Resources.of} 3, {Resources.Projects}");
             sb.AppendLine("");
-            sb.AppendLine("## Projects");
+            sb.AppendLine($"## {Resources.Projects}");
             //Projects
             var projects = await client.Repository.Project.GetAllForRepository(owner, repository);
             int projectid = 1;
@@ -110,19 +112,18 @@ namespace Documentor
                 sb.AppendLine($"### {project.Name}");
                 sb.AppendLine("");
                
-                sb.AppendLine("| Item | Value |");
+                sb.AppendLine($"| {Resources.Item} | {Resources.Value} |");
                 sb.AppendLine("| -----| ----- |");
-                sb.AppendLine($"| Created | {project.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} |");
-                sb.AppendLine($"| Project Number | {project.Number}");
-                sb.AppendLine($"| State | {project.State}");
-                sb.AppendLine($"| State | {project.UpdatedAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} |");
+                sb.AppendLine($"| {Resources.DateCreated} | {project.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} |");
+                sb.AppendLine($"| {Resources.Project_Number} | {project.Number}");
+                sb.AppendLine($"| {Resources.Status} | {project.State}");
+                sb.AppendLine($"| {Resources.Modified} | {project.UpdatedAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} |");
                 sb.AppendLine("");
 
-                sb.AppendLine("#### Project Status");
+                sb.AppendLine($"#### {Resources.Project_Status}");
                 sb.AppendLine("");
                 var columns = await client.Repository.Project.Column.GetAll(project.Id);
-                string line1="";
-                string line2="";
+               
                 List<string> lines = new List<string>();
                 int lcount = 0;
                 int ccount = 0;
@@ -140,13 +141,13 @@ namespace Documentor
                     //Handle no cards, produce nice message
                     if (cards.Count == 0) 
                     { 
-                        sb.AppendLine("     *There are no cards in this status*");
+                        sb.AppendLine($"     *{Resources.ThereAreNoIssuesinThisStatus}*");
                         sb.AppendLine();
                     }
                    foreach (var card in cards)
                     {
                         cardcount++;
-                        Console.WriteLine($"Working on card: {cardcount} of {cards.Count}");
+                        Console.WriteLine($"         {Resources.Working_on_card}: {cardcount} {Resources.of} {cards.Count}");
                         if (column.Name != "Done" && column.Name !="Closed")
                         {
                             if (string.IsNullOrEmpty(card.Note))
@@ -192,7 +193,7 @@ namespace Documentor
 
             string output = sb.ToString();
             System.IO.File.WriteAllText($".\\{repository}.md", output);
-            Console.WriteLine($"{user.Name} has {user.PublicRepos} public repositories");
+            Console.WriteLine($"{Resources.Complete}.");
            
 
         }
