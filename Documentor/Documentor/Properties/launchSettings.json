@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Documentor": {
+      "commandName": "Project",
+      "commandLineArgs": "--owner nickbeau --repository cbrook --token 1cb0e948dacfabc1813d95cbfb363745fc265721"
+    }
+  }
+}

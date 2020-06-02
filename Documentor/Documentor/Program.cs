@@ -3,17 +3,29 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Octokit;
+using System.CommandLine;
+using System.CommandLine.Invocation;
+using Documentor.Properties;
 
 namespace Documentor
 {
     class Program
     {
-        
-        static async Task Main(string[] args)
+        /// <summary>
+        /// Produces a markdown status report of a github repo
+        /// </summary>
+        /// <param name="repository">The Repository</param>
+        /// <param name="owner">The Owner's Github Alias</param>
+        /// <param name="token">The GitHub Token</param>
+        /// <returns></returns>
+        public static async Task Main(string repository, string owner, string token)
         {
-            string owner = "nickbeau";
-            string repository = "cbrook";
-            string token = "1cb0e948dacfabc1813d95cbfb363745fc265721";
+           
+
+            Console.WriteLine($"{Resources.AppTitle}");
+            Console.WriteLine($"{Resources.Copyright}");
+            Console.WriteLine($"{Resources.PlsWait}");
+            Console.WriteLine("Step 1 of # - Headers");
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("# Released Group Project Status Report");
             sb.AppendLine("");
@@ -44,7 +56,7 @@ namespace Documentor
 
             sb.AppendLine("");
             sb.AppendLine("## Issues");
-
+            Console.WriteLine("Step 2 of # - Issues modified in last 30 days");
             sb.AppendLine("");
             sb.AppendLine("### Issues modified in the last 30 days");
             var issuefilter = new RepositoryIssueRequest
@@ -84,13 +96,16 @@ namespace Documentor
                 sb.AppendLine($"| [{issue.Number}]({issue.Url}) | {issue.UpdatedAt.Value.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} | {issue.State} | {issue.Title} |");
             }
 
+            Console.WriteLine("Step 3 of #, Projects");
             sb.AppendLine("");
             sb.AppendLine("## Projects");
             //Projects
             var projects = await client.Repository.Project.GetAllForRepository(owner, repository);
-
+            int projectid = 1;
             foreach(var project in projects)
             {
+                Console.WriteLine($" Working on Project {projectid} of {projects.Count}: {project.Name}");
+                projectid++;
                 sb.AppendLine("");
                 sb.AppendLine($"### {project.Name}");
                 sb.AppendLine("");
@@ -111,28 +126,56 @@ namespace Documentor
                 List<string> lines = new List<string>();
                 int lcount = 0;
                 int ccount = 0;
+                int colcount = 0;
                 foreach(var column in columns)
                 {
+                    colcount++;
                     sb.AppendLine($"##### {column.Name}");
                     sb.AppendLine("");
-
+                    Console.WriteLine($"  Column {colcount} of {columns.Count} - {column.Name}");
                     var cards = await client.Repository.Project.Card.GetAll(column.Id);
                     lcount = 0;
+                    int cardcount = 0;
+
+                    //Handle no cards, produce nice message
+                    if (cards.Count == 0) 
+                    { 
+                        sb.AppendLine("     *There are no cards in this status*");
+                        sb.AppendLine();
+                    }
                    foreach (var card in cards)
                     {
-                        Console.WriteLine($"Working on card: {card.Id}"); 
-                        if (string.IsNullOrEmpty(card.Note))
-                            { 
-                            string issueId = card.ContentUrl.Split("/")[card.ContentUrl.Split("/").Length-1];
-                            var cardissue = await client.Issue.Get(owner, repository, Convert.ToInt32(issueId));
-                            sb.AppendLine($"*{cardissue.Title}*");
-                            sb.AppendLine($"{cardissue.Body}");
-                            sb.AppendLine("");
+                        cardcount++;
+                        Console.WriteLine($"Working on card: {cardcount} of {cards.Count}");
+                        if (column.Name != "Done" && column.Name !="Closed")
+                        {
+                            if (string.IsNullOrEmpty(card.Note))
+                            {
+                                string issueId = card.ContentUrl.Split("/")[card.ContentUrl.Split("/").Length - 1];
+                                var cardissue = await client.Issue.Get(owner, repository, Convert.ToInt32(issueId));
+                                sb.AppendLine($"**[{issueId}]({cardissue.Url})** - *{cardissue.Title}*");
+                                sb.AppendLine("");
+                                sb.AppendLine($"{cardissue.Body}");
+                                sb.AppendLine("");
+                            }
+                            else
+                            {
+                                sb.AppendLine(card.Note);
+                                sb.AppendLine("");
+                            }
                         }
                         else
                         {
-                            sb.AppendLine(card.Note);
-                            sb.AppendLine("");
+                            if (string.IsNullOrEmpty(card.Note))
+                            {
+                                string issueId = card.ContentUrl.Split("/")[card.ContentUrl.Split("/").Length - 1];
+                                var cardissue = await client.Issue.Get(owner, repository, Convert.ToInt32(issueId));
+                                sb.AppendLine($"- [{issueId}]({cardissue.Url}) - {cardissue.Title}");
+                            }
+                            else
+                            {
+                                
+                            }    
                         }
 
                     }
@@ -148,15 +191,10 @@ namespace Documentor
 
 
             string output = sb.ToString();
-            System.IO.File.WriteAllText($"c:\\dev\\{repository}.md", output);
+            System.IO.File.WriteAllText($".\\{repository}.md", output);
             Console.WriteLine($"{user.Name} has {user.PublicRepos} public repositories");
            
-            
-            foreach(var issue in issues)
-            {
-                Console.WriteLine($"{issue.Number} - {issue.Title}");
-            }
-            Console.WriteLine("Hello World!");
+
         }
     }
 }
