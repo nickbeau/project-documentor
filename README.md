@@ -1,3 +1,5 @@
+![.NET Core](https://github.com/nickbeau/project-documentor/workflows/.NET%20Core/badge.svg)
+
 # project-documentor
 
 Github project documentor
