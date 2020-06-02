@@ -6,6 +6,8 @@ using Octokit;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using Documentor.Properties;
+using System.Linq.Expressions;
+using System.Globalization;
 
 namespace Documentor
 {
@@ -39,9 +41,9 @@ namespace Documentor
             var client = new GitHubClient(new ProductHeaderValue("project-documentor"));
             var tokenAuth = new Credentials(token);
             client.Credentials = tokenAuth;
-            var user = await client.User.Current();
+            var user = await client.User.Current().ConfigureAwait(true);
 
-            var repo = await client.Repository.Get(owner, repository);
+            var repo = await client.Repository.Get(owner, repository).ConfigureAwait(true);
 
             sb.AppendLine($"| {Resources.Item} | {Resources.Value} |");
             sb.AppendLine($"| -- | -- |");
@@ -69,13 +71,13 @@ namespace Documentor
                 SortProperty = IssueSort.Updated,
                 SortDirection = SortDirection.Descending
             };
-            var issues = await client.Issue.GetAllForRepository(owner, repository, issuefilter);
+            var issues = await client.Issue.GetAllForRepository(owner, repository, issuefilter).ConfigureAwait(true);
             sb.AppendLine("");
             sb.AppendLine($"| {Resources.IssueId} | {Resources.Modified} | {Resources.Status} | {Resources.Title} |");
             sb.AppendLine("| -------- | -------- | ------ | ----- |");
             foreach (var issue in issues)
             {
-                sb.AppendLine($"| [{issue.Number}]({issue.Url}) | {issue.UpdatedAt.Value.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} | {issue.State} | {issue.Title} |");
+                sb.AppendLine($"| [{issue.Number}]({issue.Url}) | {issue.UpdatedAt.Value.ToLocalTime().ToString("dd-MM-yyyy HH:mm", CultureInfo.CurrentCulture)} | {issue.State} | {issue.Title} |");
             }
 
             sb.AppendLine("");
@@ -92,17 +94,19 @@ namespace Documentor
                 SortDirection=SortDirection.Descending
             };
 
-            issues = await client.Issue.GetAllForRepository(owner, repository, issuefilter);
+            issues = await client.Issue.GetAllForRepository(owner, repository, issuefilter).ConfigureAwait(true);
             foreach (var issue in issues)
             {
-                sb.AppendLine($"| [{issue.Number}]({issue.Url}) | {issue.UpdatedAt.Value.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} | {issue.State} | {issue.Title} |");
+
+                sb.AppendLine($"| [{issue.Number}]({issue.Url}) | {issue.UpdatedAt.Value.ToLocalTime().ToString("dd-MM-yyyy HH:mm",CultureInfo.CurrentCulture )} | {issue.State} | {issue.Title} |");
+
             }
 
             Console.WriteLine($"{Resources.Step} 3 {Resources.of} 3, {Resources.Projects}");
             sb.AppendLine("");
             sb.AppendLine($"## {Resources.Projects}");
             //Projects
-            var projects = await client.Repository.Project.GetAllForRepository(owner, repository);
+            var projects = await client.Repository.Project.GetAllForRepository(owner, repository).ConfigureAwait(true);
             int projectid = 1;
             foreach(var project in projects)
             {
@@ -114,15 +118,15 @@ namespace Documentor
                
                 sb.AppendLine($"| {Resources.Item} | {Resources.Value} |");
                 sb.AppendLine("| -----| ----- |");
-                sb.AppendLine($"| {Resources.DateCreated} | {project.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} |");
+                sb.AppendLine($"| {Resources.DateCreated} | {project.CreatedAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm", CultureInfo.CurrentCulture)} |");
                 sb.AppendLine($"| {Resources.Project_Number} | {project.Number}");
                 sb.AppendLine($"| {Resources.Status} | {project.State}");
-                sb.AppendLine($"| {Resources.Modified} | {project.UpdatedAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm")} |");
+                sb.AppendLine($"| {Resources.Modified} | {project.UpdatedAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm", CultureInfo.CurrentCulture)} |");
                 sb.AppendLine("");
 
                 sb.AppendLine($"#### {Resources.Project_Status}");
                 sb.AppendLine("");
-                var columns = await client.Repository.Project.Column.GetAll(project.Id);
+                var columns = await client.Repository.Project.Column.GetAll(project.Id).ConfigureAwait(true);
                
                 List<string> lines = new List<string>();
                
@@ -133,7 +137,7 @@ namespace Documentor
                     sb.AppendLine($"##### {column.Name}");
                     sb.AppendLine("");
                     Console.WriteLine($"  Column {colcount} of {columns.Count} - {column.Name}");
-                    var cards = await client.Repository.Project.Card.GetAll(column.Id);
+                    var cards = await client.Repository.Project.Card.GetAll(column.Id).ConfigureAwait(true);
                     int cardcount = 0;
 
                     //Handle no cards, produce nice message
@@ -151,7 +155,7 @@ namespace Documentor
                             if (string.IsNullOrEmpty(card.Note))
                             {
                                 string issueId = card.ContentUrl.Split("/")[card.ContentUrl.Split("/").Length - 1];
-                                var cardissue = await client.Issue.Get(owner, repository, Convert.ToInt32(issueId));
+                                var cardissue = await client.Issue.Get(owner, repository, Convert.ToInt32(issueId, CultureInfo.CurrentCulture)).ConfigureAwait(true);
                                 sb.AppendLine($"**[{issueId}]({cardissue.Url})** - *{cardissue.Title}*");
                                 sb.AppendLine("");
                                 sb.AppendLine($"{cardissue.Body}");
@@ -168,7 +172,7 @@ namespace Documentor
                             if (string.IsNullOrEmpty(card.Note))
                             {
                                 string issueId = card.ContentUrl.Split("/")[card.ContentUrl.Split("/").Length - 1];
-                                var cardissue = await client.Issue.Get(owner, repository, Convert.ToInt32(issueId));
+                                var cardissue = await client.Issue.Get(owner, repository, Convert.ToInt32(issueId, CultureInfo.CurrentCulture)).ConfigureAwait(true);
                                 sb.AppendLine($"- [{issueId}]({cardissue.Url}) - {cardissue.Title}");
                             }
                             else
