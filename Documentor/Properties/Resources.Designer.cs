@@ -295,6 +295,24 @@ namespace Documentor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specification.
+        /// </summary>
+        internal static string Specification {
+            get {
+                return ResourceManager.GetString("Specification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specification for.
+        /// </summary>
+        internal static string SpecificationFor {
+            get {
+                return ResourceManager.GetString("SpecificationFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         internal static string Status {

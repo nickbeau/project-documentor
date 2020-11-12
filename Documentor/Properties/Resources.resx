@@ -195,6 +195,12 @@
   <data name="ReportTitle" xml:space="preserve">
     <value>Project Status Report</value>
   </data>
+  <data name="Specification" xml:space="preserve">
+    <value>Specification</value>
+  </data>
+  <data name="SpecificationFor" xml:space="preserve">
+    <value>Specification for</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>

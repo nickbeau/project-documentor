@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Documentor": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--repository XeniumCRM --owner xenium-partners --token 279dc0627d9c126010c99f716286687e0b80ccb1 --doctype spec"
     }
   }
 }
