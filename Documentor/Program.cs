@@ -26,8 +26,8 @@ namespace Documentor
         /// <returns></returns>
         public static async Task Main(string repository, string owner, string token, string doctype)
         {
-            string output="";
-           switch(doctype.ToUpperInvariant())
+            string output;
+            switch (doctype.ToUpperInvariant())
             {
                 case "PROJECT":
                     var myProject = new Project(repository, owner, token);

@@ -13,9 +13,9 @@ namespace Documentor
     /// </summary>
     public class Project
     {
-        private string _repository;
-        private string _owner;
-        private string _token;
+        private readonly string _repository;
+        private readonly string _owner;
+        private readonly string _token;
 
         /// <summary>
         /// Creates a new instance of the project class
@@ -66,7 +66,7 @@ namespace Documentor
             sb.AppendLine($"| {Resources.Name} | {repo.Name} |");
             sb.AppendLine($"| {Resources.CurrentOpenIssues} | {repo.OpenIssuesCount} |");
             sb.AppendLine($"| {Resources.LastCodeUpdate} | {repo.PushedAt} |");
-            sb.AppendLine($"| {Resources.Subscribers} | {repo.SubscribersCount} |");
+            sb.AppendLine($"| {Resources.Subscribers} | {repo.WatchersCount} |");
             sb.AppendLine($"| {Resources.Last_Update} | {repo.UpdatedAt} |");
 
             sb.AppendLine("");
