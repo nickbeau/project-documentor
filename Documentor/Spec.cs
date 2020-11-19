@@ -85,7 +85,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -101,7 +100,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -117,7 +115,7 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
+                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(120)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -139,7 +137,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -197,7 +194,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -213,7 +209,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -229,7 +224,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -251,7 +245,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -350,7 +343,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -371,7 +363,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -431,7 +422,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };
@@ -457,7 +447,6 @@ namespace Documentor
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
                 SortProperty = IssueSort.Created,
                 SortDirection = SortDirection.Ascending
             };

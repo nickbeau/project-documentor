@@ -27,19 +27,19 @@ namespace Documentor
         public static async Task Main(string repository, string owner, string token, string doctype)
         {
             string output="";
-           switch(doctype.ToLower(CultureInfo.InvariantCulture))
+           switch(doctype.ToUpperInvariant())
             {
-                case "project":
+                case "PROJECT":
                     var myProject = new Project(repository, owner, token);
                     output = await myProject.CreateReport().ConfigureAwait(false);
                     System.IO.File.WriteAllText($".\\{repository}-projectreport.md", output);
                     break;
-                case "spec":
+                case "SPEC":
                     var mySpec = new Spec(repository, owner, token);
                     output = await mySpec.CreateReport().ConfigureAwait(false);
                     System.IO.File.WriteAllText($".\\{repository}-specification.md", output);
                     break;
-                case "mvpspec":
+                case "MVPSPEC":
                     mySpec = new Spec(repository, owner, token);
                     output = await mySpec.CreateMVPReport().ConfigureAwait(false);
                     System.IO.File.WriteAllText($".\\{repository}-mvpspecification.md", output);
