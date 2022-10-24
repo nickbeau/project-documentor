@@ -71,14 +71,14 @@ namespace Documentor
 
             sb.AppendLine("");
             sb.AppendLine($"## {Resources.Issues}");
-            Console.WriteLine($"{Resources.Step} 2 {Resources.of} 3 - {Resources.IssuesModified30}");
+            Console.WriteLine($"{Resources.Step} 2 {Resources.of} 3 - {Resources.IssuesModified365}");
             sb.AppendLine("");
             sb.AppendLine($"### {Resources.IssuesModified30}");
             var issuefilter = new RepositoryIssueRequest
             {
                 Filter = IssueFilter.All,
                 State = ItemStateFilter.All,
-                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(30)),
+                Since = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(365)),
                 SortProperty = IssueSort.Updated,
                 SortDirection = SortDirection.Descending
             };
@@ -88,7 +88,7 @@ namespace Documentor
             sb.AppendLine("| -------- | -------- | ------ | ----- |");
             foreach (var issue in issues)
             {
-                sb.AppendLine($"| [{issue.Number}]({issue.Url}) | {issue.UpdatedAt.Value.ToLocalTime().ToString("dd-MM-yyyy HH:mm", CultureInfo.CurrentCulture)} | {issue.State} | {issue.Title} |");
+                sb.AppendLine($"| [{issue.Number}]({issue.Url}) | {issue.UpdatedAt.Value.ToLocalTime().ToString("dd-MM-yyyy HH:mm", CultureInfo.CurrentCulture)} | {issue.State} | {issue.Title.Replace("|","-")} |");
             }
 
             sb.AppendLine("");

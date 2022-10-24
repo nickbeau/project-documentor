@@ -156,6 +156,9 @@
   <data name="IssuesModified30" xml:space="preserve">
     <value>Issues modified in last 30 days</value>
   </data>
+  <data name="IssuesModified365" xml:space="preserve">
+    <value>Issues modified in last year</value>
+  </data>
   <data name="Item" xml:space="preserve">
     <value>Item</value>
   </data>
